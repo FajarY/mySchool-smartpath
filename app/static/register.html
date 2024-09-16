@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="icon" type="image/png" href="./res/school.png">
+        <link rel="stylesheet" type="text/css" href="./styles.css">
+        <link rel="stylesheet" type="text/css" href="./login-register.css">
+        <script defer src="./register.js"></script>
+    </head>
+    <body>
+        <div class="login-register-box">
+            <div>
+                <div class="heading">
+                    <img src="./res/school.png" width="50px" height="50px">
+                    <h1>mySchool</h1>
+                </div>
+                <div class="boxitem">
+                    <form id="input-form">
+                        <div class="input-radio">
+                            <label>
+                                <input type="radio" name="register-type" class="radio-button__input" value="student" checked>
+                                <span class="radio-button__label" style="width: 100%;">Student</button>
+                            </label>
+                            <label>
+                                <input type="radio" name="register-type" class="radio-button__input" value="teacher">
+                                <span class="radio-button__label" style="width: 100%;">Teacher</button>
+                            </label>
+                        </div>
+                        <label for="name">Name</label><br>
+                        <input type="text" id="name" name="name" class="input-text" style="width: 100%;"><br>
+                        <label for="password">Password</label><br>
+                        <input type="password" id="password" name="password" class="input-text" style="width: 100%;"><br>
+                        <label for="confirm-password">Confirm Password</label><br>
+                        <input type="password" id="confirm-password" name="confirm-password" class="input-text" style="width: 100%;"><br><br>
+                        <input type="submit" id="submit" class="button-small"><br>
+                        <p>Have an account? <a href="/login">Login</a></p>
+                        <p class="form-message inactive" id="error-message">Error</p>
+                    </form>
+                </div>
+                <p>@No License - 2024</p>
+            </div>
+        </div>
+    </body>
+</html>

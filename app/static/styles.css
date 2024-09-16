@@ -1,0 +1,168 @@
+body
+{
+    margin: 0px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+p
+{
+    font-weight: 400;
+}
+
+/*Button*/
+.button-main
+{
+    background-color: rgb(80, 207, 235);
+    border: none;
+    padding: .8em;
+    border-radius: 1em;
+
+    font-size: 100%;
+
+    font-weight: bold;
+    color: white;
+
+    cursor: pointer;
+
+    transition: all 0.15s ease-out;
+
+    user-select: none;
+}
+.button-main:hover
+{
+    background-color: rgb(123, 219, 241);
+}
+.button-small
+{
+    background-color: rgb(255, 255, 255);
+    border: none;
+
+    padding: .8em;
+    padding-top: .4em;
+    padding-bottom: .4em;
+    border-radius: .5em;
+
+    font-size: 100%;
+
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+
+    cursor: pointer;
+
+    transition: all 0.15s ease-out;
+
+    user-select: none;
+}
+.button-small:hover
+{
+    background-color: rgb(220, 220, 220);
+}
+.loading-button
+{
+    opacity: 0.25;
+    pointer-events: none;
+}
+
+/*Box Container*/
+.box-container
+{
+    display: flex;
+    flex-direction: row;
+
+    justify-content: center;
+    align-items: center;
+
+    flex-wrap: wrap;
+    overflow: auto;
+    gap: 20px;
+
+    margin-bottom: 16px;
+
+    margin-left: var(--item-margin);
+    margin-right: var(--item-margin);
+}
+.box-container-item
+{
+    display: flex;
+    flex-direction: column;
+
+    overflow: auto;
+    flex-wrap: wrap;
+
+    border: solid 2px black;
+    border-radius: 16px;
+
+    align-items: center;
+
+    width: fit-content;
+
+    h3
+    {
+        margin-left: var(--item-margin);
+        margin-right: var(--item-margin);
+    }
+    .counter
+    {
+        color: red;
+        font-weight: bold;
+    }
+}
+
+/*Input text*/
+.input-text
+{
+    all:unset;
+
+    padding: 5px;
+    border-radius: 5px;
+    box-sizing: border-box;
+
+    background-color: white;
+
+    transition: all ease-in-out 0.15s;
+
+    margin: 0px;
+}
+.input-text:focus
+{
+    background-color: aliceblue;
+}
+
+/*Radio*/
+.radio-button__input
+{
+    display: none;
+}
+.radio-button__label
+{
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+
+    user-select: none;
+    padding: 8px;
+
+    background-color: white;
+    color: black;
+
+    border-radius: 5px;
+
+    transition: ease-out all 0.15s;
+
+    opacity: 0.5;
+}
+.radio-button__input:checked + .radio-button__label
+{
+    opacity: 1;
+    color: white;
+    background-color: black;
+}
+.radio-button__label:hover
+{
+    opacity: 0.75;
+}
+
+.inactive
+{
+    display: none !important;
+}
