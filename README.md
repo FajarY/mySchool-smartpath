@@ -6,14 +6,14 @@ Project smartpath mengintegrasikan frontend, backend, dan database. Teknologi ya
 - Programming Language : Typescript
 - HTTP Framework : Express
 - Database : MySQL
-- Query Builder : KNEX
+- Query Builder : Knex
 - Authorization : Json Web Token
 - API Design : REST API
 
 Cara menjalankan backend
 - Pertama aturlah .env
 - Lalu download dependencies
-- kedua jalankan `npx knex migrate:latest`
+- ketiga jalankan `npx knex migrate:latest`
 - ketiga jalankan `npm run serve`
 
 ___
@@ -64,6 +64,6 @@ Terdapat beberapa API dan isi dari setiap API
 
 ___
 ### Testing
-Untuk melakukan testing bisa langsung menjalankan
+Untuk melakukan testing, pastikan berada di folder app lalu bisa langsung menjalankan
 ```sh
 npm run test
