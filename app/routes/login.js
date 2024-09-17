@@ -37,7 +37,6 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const loginType = req.body.loginType;
-        console.log(req.body);
         if (loginType) {
             if (loginType === 'student') {
                 const data = req.body;

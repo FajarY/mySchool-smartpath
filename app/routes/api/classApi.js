@@ -60,6 +60,8 @@ router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const id = Number(req.params.id.substring(1));
         const inputData = req.body;
+        inputData.created_time = undefined;
+        inputData.id = undefined;
         if (Number.isSafeInteger(id)) {
             const data = yield class_1.default.update(id, inputData);
             if (data) {

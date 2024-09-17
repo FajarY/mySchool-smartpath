@@ -16,7 +16,6 @@ router.post('/', async (req, res) =>
             res.status(400).json({ message:'Unauthorized!' });
             return;
         }
-
         if(data.name && data.password && data.maximum_student_count && data.maximum_teacher_count)
         {
             const inputData : Class = await _class.create(data.name, data.password, data.maximum_student_count, data.maximum_teacher_count, data.description);
@@ -69,6 +68,9 @@ router.put('/:id', async (req, res) =>
     {
         const id = Number(req.params.id.substring(1));
         const inputData : Partial<Class> = req.body;
+
+        inputData.created_time = undefined;
+        inputData.id = undefined;
 
         if(Number.isSafeInteger(id))
         {

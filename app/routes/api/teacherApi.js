@@ -18,10 +18,9 @@ const lib_1 = require("../../modules/lib");
 const router = express_1.default.Router();
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const name = (0, lib_1.getAs)(req.body.name, 'string');
-        const password = (0, lib_1.getAs)(req.body.password, 'string');
-        if (name && password) {
-            const data = yield teacher_1.default.create(name, password);
+        const inputData = req.body;
+        if (inputData.name && inputData.password) {
+            const data = yield teacher_1.default.create(inputData.name, inputData.password);
             res.status(201).json(data);
         }
         else {
@@ -62,9 +61,11 @@ router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const id = Number(req.params.id.substring(1));
         const data = {
-            name: (0, lib_1.getAs)(req.body.name, 'string'),
-            password: (0, lib_1.getAs)(req.body.password, 'string')
+            name: req.body.name,
+            password: req.body.password
         };
+        data.id = undefined;
+        data.register_time = undefined;
         const tokenData = req.body.tokenData;
         if (Number.isSafeInteger(id)) {
             if (tokenData.loginType !== 'teacher' || tokenData.id !== id) {

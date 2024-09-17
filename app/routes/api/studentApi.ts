@@ -9,11 +9,11 @@ router.post('/', async(req, res) =>
 {
     try
     {
-        const name : string | undefined = getAs<string>(req.body.name, 'string');
-        const password : string | undefined = getAs<string>(req.body.password, 'string');
-        if(name && password)
+        const inputData : Partial<Student> = req.body;
+
+        if(inputData.name && inputData.password)
         {
-            const data : Student = await student.create(name, password);
+            const data : Student = await student.create(inputData.name, inputData.password);
             res.status(201).json(data);
         }
         else
@@ -71,11 +71,12 @@ router.put('/:id', async (req, res) =>
     try
     {
         const id = Number(req.params.id.substring(1));
-        const data : Partial<Student> =
+        const data : Partial<Student> = 
         {
-            name:getAs<string>(req.body.name, 'string'),
-            password:getAs<string>(req.body.password, 'string')
+            name: req.body.name,
+            password: req.body.password
         }
+
         const tokenData : JWTokenData = req.body.tokenData;
 
         if(Number.isSafeInteger(id))
