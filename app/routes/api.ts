@@ -6,8 +6,8 @@ import { tokenParser } from '../modules/lib';
 
 const router = express.Router();
 
-router.use('/student', tokenParser, studentApi);
-router.use('/teacher', tokenParser, teacherApi);
-router.use('/class', tokenParser, classApi);
+router.use('/student', studentApi);
+router.use('/teacher', teacherApi);
+router.use('/class', classApi);
 
 export default router;

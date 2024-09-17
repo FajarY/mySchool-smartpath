@@ -35,6 +35,13 @@ const findAll = function () {
         return yield (0, knex_1.default)('student').select('*');
     });
 };
+const count = function () {
+    return __awaiter(this, void 0, void 0, function* () {
+        const result = yield (0, knex_1.default)('student').count('* as count');
+        const count = result[0].count;
+        return Number(count);
+    });
+};
 const update = function (id, data) {
     return __awaiter(this, void 0, void 0, function* () {
         yield (0, knex_1.default)('student').where('id', id).update(data);
@@ -50,6 +57,7 @@ exports.default = {
     create,
     findById,
     findAll,
+    count,
     update,
     del
 };

@@ -2,6 +2,7 @@ import express from 'express';
 import teacher, { Teacher } from '../../models/teacher';
 import { getAs, handleError, handleDefaultResponseError } from '../../modules/lib';
 import { JWTokenData } from '../login';
+import { tokenParser } from '../../modules/lib';
 
 const router = express.Router();
 
@@ -28,7 +29,19 @@ router.post('/', async(req, res) =>
     }
 });
 
-router.get('/:id', async (req, res) =>
+router.get('/count', async (req, res) =>
+{
+    try
+    {
+        res.status(201).json({ count:await teacher.count() });
+    }
+    catch(err)
+    {
+        handleDefaultResponseError(res, err);
+    }
+});
+
+router.get('/:id', tokenParser, async (req, res) =>
 {
     try
     {
@@ -65,7 +78,7 @@ router.get('/:id', async (req, res) =>
     }
 });
 
-router.put('/:id', async (req, res) =>
+router.put('/:id', tokenParser, async (req, res) =>
 {
     try
     {
@@ -110,7 +123,7 @@ router.put('/:id', async (req, res) =>
     }
 });
 
-router.delete('/:id', async (req, res) =>
+router.delete('/:id', tokenParser, async (req, res) =>
 {
     try
     {

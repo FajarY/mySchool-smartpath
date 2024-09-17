@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const student_1 = __importDefault(require("../../models/student"));
 const lib_1 = require("../../modules/lib");
+const lib_2 = require("../../modules/lib");
 const router = express_1.default.Router();
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -31,7 +32,15 @@ router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         (0, lib_1.handleDefaultResponseError)(res, err);
     }
 }));
-router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/count', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        res.status(201).json({ count: yield student_1.default.count() });
+    }
+    catch (err) {
+        (0, lib_1.handleDefaultResponseError)(res, err);
+    }
+}));
+router.get('/:id', lib_2.tokenParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = Number(req.params.id.substring(1));
         var data = null;
@@ -57,7 +66,7 @@ router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         (0, lib_1.handleDefaultResponseError)(res, err);
     }
 }));
-router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.put('/:id', lib_2.tokenParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = Number(req.params.id.substring(1));
         const data = {
@@ -86,7 +95,7 @@ router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         (0, lib_1.handleDefaultResponseError)(res, err);
     }
 }));
-router.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete('/:id', lib_2.tokenParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = Number(req.params.id.substring(1));
         const tokenData = req.body.tokenData;

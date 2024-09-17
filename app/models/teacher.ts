@@ -28,6 +28,13 @@ const findAll = async function() : Promise<Teacher[]>
 {
     return await db('teacher').select('*');
 };
+const count = async function() : Promise<number>
+{
+    const result = await db('teacher').count('* as count');
+    const count = result[0].count;
+
+    return Number(count);
+}
 const update = async function(id : number, data : Partial<Teacher>) : Promise<Teacher>
 {
     await db('teacher').where('id', id).update(data);
@@ -43,6 +50,7 @@ export default
     create,
     findById,
     findAll,
+    count,
     update,
     del
 };
