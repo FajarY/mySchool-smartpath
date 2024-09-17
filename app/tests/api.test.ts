@@ -89,7 +89,29 @@ test('Login student', async () =>
 
     expect(data).toHaveProperty('token');
 
-    studentToken = data.token;
+    studentToken = 'Bearer ' + data.token;
+});
+
+test('Get student data', async () =>
+{
+    const req : RequestInit =
+    {
+        method:'GET',
+        headers:{
+            'Content-Type' : 'application/json',
+            'Authorization' : studentToken
+        }
+    };
+
+    const res = await fetch(url + `api/student/:${studentData.id}`, req);
+
+    expect(res.status).toBe(201);
+
+    const data = await res.json();
+
+    expect(data).toHaveProperty('id');
+    expect(data).toHaveProperty('name');
+    expect(data).toHaveProperty('register_time');
 });
 
 const newStudentData : Partial<Student> =
@@ -102,8 +124,11 @@ test('Update student', async () =>
     const req : RequestInit =
     {
         method:'PUT',
-        headers:{'Content-Type' : 'application/json'},
-        body:JSON.stringify({ id:studentData.id, name:newStudentData.name, password:newStudentData.password, token:studentToken })
+        headers:{
+            'Content-Type' : 'application/json',
+            'Authorization' : studentToken
+        },
+        body:JSON.stringify({ id:studentData.id, name:newStudentData.name, password:newStudentData.password })
     };
 
     const res = await fetch(url + `api/student/:${studentData.id}`, req);
@@ -124,7 +149,9 @@ test('Update student without token', async () =>
     const req : RequestInit =
     {
         method:'PUT',
-        headers:{'Content-Type' : 'application/json'},
+        headers:{
+            'Content-Type' : 'application/json',
+        },
         body:JSON.stringify({ id:studentData.id, name:'test-without', password:newStudentData.password })
     };
     const res = await fetch(url + `api/student/:${studentData.id}`, req);
@@ -141,8 +168,10 @@ test('Delete student', async () =>
     const req : RequestInit =
     {
         method:'DELETE',
-        headers:{'Content-Type' : 'application/json'},
-        body:JSON.stringify({ token:studentToken })
+        headers:{
+            'Content-Type' : 'application/json',
+            'Authorization' : studentToken
+        }
     };
     const res = await fetch(url + `api/student/:${studentData.id}`, req);
 
@@ -202,7 +231,7 @@ test('Login teacher', async () =>
 
     expect(data).toHaveProperty('token');
 
-    teacherToken = data.token;
+    teacherToken =  'Bearer ' + data.token;
 });
 
 const newTeacherData : Partial<Teacher> =
@@ -215,8 +244,11 @@ test('Update teacher', async () =>
     const req : RequestInit =
     {
         method:'PUT',
-        headers:{'Content-Type' : 'application/json'},
-        body:JSON.stringify({ id:teacherData.id, name:newTeacherData.name, password:newTeacherData.password, token:teacherToken })
+        headers:{
+            'Content-Type' : 'application/json',
+            'Authorization' : teacherToken
+        },
+        body:JSON.stringify({ id:teacherData.id, name:newTeacherData.name, password:newTeacherData.password })
     };
 
     const res = await fetch(url + `api/teacher/:${teacherData.id}`, req);
@@ -237,8 +269,9 @@ test('Delete teacher without token', async () =>
     const req : RequestInit =
     {
         method:'DELETE',
-        headers:{'Content-Type' : 'application/json'},
-        body:JSON.stringify({ })
+        headers:{
+            'Content-Type' : 'application/json',
+        }
     };
     const res = await fetch(url + `api/teacher/:${teacherData.id}`, req);
 
@@ -254,8 +287,10 @@ test('Delete teacher', async () =>
     const req : RequestInit =
     {
         method:'DELETE',
-        headers:{'Content-Type' : 'application/json'},
-        body:JSON.stringify({ token:teacherToken })
+        headers:{
+            'Content-Type' : 'application/json',
+            'Authorization' : teacherToken
+        }
     };
     const res = await fetch(url + `api/teacher/:${teacherData.id}`, req);
 

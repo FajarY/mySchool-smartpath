@@ -18,7 +18,18 @@ export function tokenParser(req : Request, res : Response, next : NextFunction)
         res.status(500).json({ message:'Error on server!' });
         return;
     }
-    const token : string | undefined = req.body.token;
+
+    const authArr = req.headers['authorization'];
+    if(!authArr)
+    {
+        console.error(`[Info] Incoming request don't have authorization in header!`);
+        res.status(400).json({ message:'Unauthorized!' });
+        return;
+    }
+    //Bearer {The Token}
+    //So we split (' ') and take the second item
+    const token : string | undefined = authArr.split(' ')[1];
+
     if(!token)
     {
         console.error(`[Info] Token parser cannot read incoming token!`);
