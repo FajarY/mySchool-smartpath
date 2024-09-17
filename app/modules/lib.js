@@ -1,13 +1,44 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.httpRequestListener = httpRequestListener;
+exports.tokenParser = tokenParser;
 exports.notFoundHandler = notFoundHandler;
 exports.getAs = getAs;
 exports.handleError = handleError;
 exports.handleDefaultResponseError = handleDefaultResponseError;
+exports.verifyType = verifyType;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 function httpRequestListener(req, res, next) {
     console.log(`[Info] Incoming ${req.method} ${req.path}`);
     next();
+}
+function tokenParser(req, res, next) {
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+        console.error(`[Info] Token parser cannot read secret!`);
+        res.status(500).json({ message: 'Error on server!' });
+        return;
+    }
+    const token = req.body.token;
+    if (!token) {
+        console.error(`[Info] Token parser cannot read incoming token!`);
+        res.status(400).json({ message: 'Unauthorized!' });
+        return;
+    }
+    jsonwebtoken_1.default.verify(token, secret, (error, payload) => {
+        if (error) {
+            console.error(error);
+            res.status(400).json({ message: 'Unautorized!' });
+        }
+        else {
+            console.log(`[Info] With token ${req.method} ${req.path}`);
+            req.body.tokenData = verifyType(payload);
+            next();
+        }
+    });
 }
 function notFoundHandler(req, res, next) {
     res.status(404);
@@ -43,4 +74,11 @@ function handleDefaultResponseError(res, err, resMessage, resStatus) {
     const errVal = handleError(err);
     res.status(defaultResStatus).json({ message: defaultResMessage });
     return errVal;
+}
+function verifyType(data) {
+    const val = data;
+    if (val) {
+        return val;
+    }
+    throw new Error('Cannot verify type!');
 }

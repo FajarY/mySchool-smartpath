@@ -36,7 +36,12 @@ router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const id = Number(req.params.id.substring(1));
         var data = null;
+        const tokenData = req.body.tokenData;
         if (Number.isSafeInteger(id)) {
+            if (tokenData.loginType !== 'student' || tokenData.id !== id) {
+                res.status(400).json({ message: 'Unauthorized' });
+                return;
+            }
             data = yield student_1.default.findById(id);
             if (data) {
                 res.status(201).json(data);
@@ -60,7 +65,12 @@ router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             name: (0, lib_1.getAs)(req.body.name, 'string'),
             password: (0, lib_1.getAs)(req.body.password, 'string')
         };
+        const tokenData = req.body.tokenData;
         if (Number.isSafeInteger(id)) {
+            if (tokenData.loginType !== 'student' || tokenData.id !== id) {
+                res.status(400).json({ message: 'Unauthorized' });
+                return;
+            }
             const newData = yield student_1.default.update(id, data);
             if (newData) {
                 res.status(201).json(newData);
@@ -80,7 +90,12 @@ router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 router.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = Number(req.params.id.substring(1));
-        if (id) {
+        const tokenData = req.body.tokenData;
+        if (Number.isSafeInteger(id)) {
+            if (tokenData.loginType !== 'student' || tokenData.id !== id) {
+                res.status(400).json({ message: 'Unauthorized' });
+                return;
+            }
             const status = yield student_1.default.del(id);
             if (status) {
                 res.status(201).json({ status: status });

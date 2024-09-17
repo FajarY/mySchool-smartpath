@@ -27,8 +27,6 @@ form.onsubmit = async (event) =>
 
         submitButton.classList.add('loading-button');
 
-        console.log(JSON.stringify(data));
-
         errorMessage.classList.add('inactive');
         const response = await fetch('/register', {
             method: 'POST',
@@ -40,10 +38,12 @@ form.onsubmit = async (event) =>
         });
 
         const responseData = await response.json();
-
+        
         if(response.ok)
         {
-            console.log(responseData);
+            sessionStorage.setItem('register-id', responseData.id);
+            sessionStorage.setItem('register-name', responseData.name);
+            window.location.href = '/login'
         }
         else
         {

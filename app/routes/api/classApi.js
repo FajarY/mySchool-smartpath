@@ -19,6 +19,11 @@ const router = express_1.default.Router();
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const data = req.body;
+        const tokenData = req.body.tokenData;
+        if (tokenData.loginType !== 'teacher') {
+            res.status(400).json({ message: 'Unauthorized!' });
+            return;
+        }
         if (data.name && data.password && data.maximum_student_count && data.maximum_teacher_count) {
             const inputData = yield class_1.default.create(data.name, data.password, data.maximum_student_count, data.maximum_teacher_count, data.description);
             res.status(201).json(inputData);

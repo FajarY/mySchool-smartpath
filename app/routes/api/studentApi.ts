@@ -1,6 +1,7 @@
 import express from 'express';
 import student, { Student } from '../../models/student';
 import { getAs, handleError, handleDefaultResponseError } from '../../modules/lib';
+import { JWTokenData } from '../login';
 
 const router = express.Router();
 
@@ -32,8 +33,17 @@ router.get('/:id', async (req, res) =>
     {
         const id = Number(req.params.id.substring(1));
         var data : Student | null = null;
+
+        const tokenData : JWTokenData = req.body.tokenData;
+
         if(Number.isSafeInteger(id))
         {
+            if(tokenData.loginType !== 'student' || tokenData.id !== id)
+            {
+                res.status(400).json({ message:'Unauthorized' });
+                return;
+            }
+
             data = await student.findById(id);
 
             if(data)
@@ -66,8 +76,16 @@ router.put('/:id', async (req, res) =>
             name:getAs<string>(req.body.name, 'string'),
             password:getAs<string>(req.body.password, 'string')
         }
+        const tokenData : JWTokenData = req.body.tokenData;
+
         if(Number.isSafeInteger(id))
         {
+            if(tokenData.loginType !== 'student' || tokenData.id !== id)
+            {
+                res.status(400).json({ message:'Unauthorized' });
+                return;
+            }
+
             const newData : Student = await student.update(id, data);
 
             if(newData)
@@ -95,9 +113,16 @@ router.delete('/:id', async (req, res) =>
     try
     {
         const id = Number(req.params.id.substring(1));
+        const tokenData : JWTokenData = req.body.tokenData;
 
-        if(id)
+        if(Number.isSafeInteger(id))
         {
+            if(tokenData.loginType !== 'student' || tokenData.id !== id)
+            {
+                res.status(400).json({ message:'Unauthorized' });
+                return;
+            }
+
             const status : boolean = await student.del(id);
             if(status)
             {

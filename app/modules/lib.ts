@@ -1,4 +1,6 @@
 import { Request, Response, NextFunction } from "express";
+import jwt from 'jsonwebtoken';
+import { JWTokenData } from "../routes/login";
 
 export function httpRequestListener(req : Request, res : Response, next : NextFunction)
 {
@@ -6,6 +8,39 @@ export function httpRequestListener(req : Request, res : Response, next : NextFu
 
     next();
 }
+
+export function tokenParser(req : Request, res : Response, next : NextFunction)
+{
+    const secret : string | undefined = process.env.JWT_SECRET;
+    if(!secret)
+    {
+        console.error(`[Info] Token parser cannot read secret!`);
+        res.status(500).json({ message:'Error on server!' });
+        return;
+    }
+    const token : string | undefined = req.body.token;
+    if(!token)
+    {
+        console.error(`[Info] Token parser cannot read incoming token!`);
+        res.status(400).json({ message:'Unauthorized!' });
+        return;
+    }
+    jwt.verify(token, secret, (error, payload) =>
+    {
+        if(error)
+        {
+            console.error(error);
+            res.status(400).json({ message:'Unautorized!' });
+        }
+        else
+        {
+            console.log(`[Info] With token ${req.method} ${req.path}`);
+            req.body.tokenData = verifyType<JWTokenData>(payload);
+            next();
+        }
+    });
+}
+
 export function notFoundHandler(req : Request, res : Response, next : NextFunction)
 {
     res.status(404);
@@ -55,4 +90,15 @@ export function handleDefaultResponseError(res : Response, err : unknown, resMes
     res.status(defaultResStatus).json({ message: defaultResMessage });
 
     return errVal;
+}
+
+export function verifyType<T>(data : any) : T
+{
+    const val : T | undefined = data;
+
+    if(val)
+    {
+        return val;
+    }
+    throw new Error('Cannot verify type!');
 }

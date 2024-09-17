@@ -2,6 +2,7 @@ import express from 'express'
 import fs from 'fs';
 import path from 'path';
 import { PORT } from '../app';
+import bcrypt from 'bcryptjs';
 
 import student, { Student } from '../models/student';
 import teacher, { Teacher } from '../models/teacher';
@@ -37,12 +38,14 @@ router.post('/', async (req, res) =>
         {
             try
             {
+                data.password = await bcrypt.hash(data.password, 10);
                 const createdData = await student.create(data.name, data.password);
                 const partialData : Partial<Student> = createdData;
+
                 partialData.password = undefined;
                 partialData.register_time = undefined;
 
-                res.status(400).json(partialData);
+                res.status(200).json(partialData);
             }
             catch(err)
             {
@@ -61,12 +64,13 @@ router.post('/', async (req, res) =>
         {
             try
             {
+                data.password = await bcrypt.hash(data.password, 10);
                 const createdData = await teacher.create(data.name, data.password);
                 const partialData : Partial<Teacher> = createdData;
                 partialData.password = undefined;
                 partialData.register_time = undefined;
 
-                res.status(400).json(partialData);
+                res.status(200).json(partialData);
             }
             catch(err)
             {

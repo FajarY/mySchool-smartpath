@@ -15,7 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-const app_1 = require("../app");
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const student_1 = __importDefault(require("../models/student"));
+const teacher_1 = __importDefault(require("../models/teacher"));
+const lib_1 = require("../modules/lib");
 const router = express_1.default.Router();
 const registerHtmlPath = path_1.default.join(path_1.default.resolve(__dirname, '../'), 'static/register.html');
 router.get('/', (req, res) => {
@@ -32,12 +35,42 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const inputType = req.body.registerType;
     if (inputType === 'student') {
-        console.log('Redirecting register to student');
-        res.redirect(`http://localhost:${app_1.PORT}/api/student/`);
+        const data = req.body;
+        if (data.name && data.password) {
+            try {
+                data.password = yield bcryptjs_1.default.hash(data.password, 10);
+                const createdData = yield student_1.default.create(data.name, data.password);
+                const partialData = createdData;
+                partialData.password = undefined;
+                partialData.register_time = undefined;
+                res.status(200).json(partialData);
+            }
+            catch (err) {
+                (0, lib_1.handleDefaultResponseError)(res, err, 'Failed on registering, server error or invalid input!');
+            }
+        }
+        else {
+            res.status(400).json({ message: 'Failed on parsing input!' });
+        }
     }
     else if (inputType === 'teacher') {
-        console.log('Redirecting register to teacher');
-        res.redirect(`http://localhost:${app_1.PORT}/api/teacher/`);
+        const data = req.body;
+        if (data.name && data.password) {
+            try {
+                data.password = yield bcryptjs_1.default.hash(data.password, 10);
+                const createdData = yield teacher_1.default.create(data.name, data.password);
+                const partialData = createdData;
+                partialData.password = undefined;
+                partialData.register_time = undefined;
+                res.status(200).json(partialData);
+            }
+            catch (err) {
+                (0, lib_1.handleDefaultResponseError)(res, err, 'Failed on registering, server error or invalid input!');
+            }
+        }
+        else {
+            res.status(400).json({ message: 'Failed on parsing input!' });
+        }
     }
     else {
         const err = {

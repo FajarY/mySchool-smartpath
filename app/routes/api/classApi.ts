@@ -1,6 +1,7 @@
 import express from 'express';
 import _class, { Class } from '../../models/class';
 import { getAs, handleDefaultResponseError } from '../../modules/lib';
+import { JWTokenData } from '../login';
 
 const router = express.Router();
 
@@ -9,6 +10,12 @@ router.post('/', async (req, res) =>
     try
     {
         const data : Partial<Class> = req.body;
+        const tokenData : JWTokenData = req.body.tokenData;
+        if(tokenData.loginType !== 'teacher')
+        {
+            res.status(400).json({ message:'Unauthorized!' });
+            return;
+        }
 
         if(data.name && data.password && data.maximum_student_count && data.maximum_teacher_count)
         {

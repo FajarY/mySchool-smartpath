@@ -6,18 +6,23 @@ const successBoxMessageParagraph = document.getElementById('success-box-message-
 
 const parseLoginParams = () =>
 {
-    const params = new URLSearchParams(window.location.search);
-    const paramObj = {};
-
-    for(const [key, value] of params.entries())
-    {
-        paramObj[key] = value;
-    }
+    const paramObj = {
+        id: sessionStorage.getItem('register-id'),
+        name: sessionStorage.getItem('register-name')
+    };
     if(paramObj.id && paramObj.name)
     {
         successBoxMessageParagraph.textContent = `${paramObj.name} registered successfull with id of ${paramObj.id}, you can now log in!`;
         successBoxMessage.classList.remove('inactive');
     }
+
+    sessionStorage.removeItem('register-id');
+    sessionStorage.removeItem('register-name');
+}
+const loginSuccess = (token) =>
+{
+    successBoxMessageParagraph.textContent = `Login successfull, token : ${token} for postman!`;
+    successBoxMessage.classList.remove('inactive');
 }
 
 parseLoginParams();
@@ -44,13 +49,14 @@ form.onsubmit = async (event) =>
 
         const response = await fetch('/login', {
             method: 'POST',
+            headers: { 'Content-Type':'application/json' },
             body: JSON.stringify(data)
         });
 
         if(response.ok)
         {
             const result = await response.json();
-            console.log(result);
+            loginSuccess(result.token);
         }
         else
         {
